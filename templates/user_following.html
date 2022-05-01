@@ -1,0 +1,14 @@
+{% extends "users.html" %}
+
+{% block top %}
+<div>
+    <div>
+        {{ user.name }}
+        @{{ user.login }}
+    </div>
+    <div>
+        <a href="/{{ user.login }}/following" class="button button_active">Читает</a>
+        <a href="/{{ user.login }}/followers" class="button">Читатели</a>
+    </div>
+</div>
+{% endblock %}

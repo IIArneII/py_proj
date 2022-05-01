@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles/style.css">
+</head>
+    <body>
+        <header class="blur">
+            <span class="logo">
+                <img src="" alt="">
+                Название
+            </span>
+            <span>
+                {{ title }}
+            </span>
+            <span>
+                <form name="search" action="/search" method="get" style="float: right">
+                    {{ search_form.hidden_tag() }}
+                    {{ search_form.search() }}
+                    {{ search_form.submit(type="submit") }}
+                </form>
+            </span>
+        </header>
+        <aside>
+            {% if not current_user.is_authenticated %}
+            <form name="login" action="/login" method="post">
+                <div>
+                    {{ login_form.login(render_kw={"placeholder": "Логин"}) }}
+                </div>
+                <div>
+                    {{ login_form.password(render_kw={"placeholder": "Пароль"}) }}<br>
+                </div>
+                <div>
+                    {{ login_form.remember.label }}
+                    {{ login_form.remember() }}<br>
+                </div>
+                <div>
+                    {{ login_form.submit(type="submit", class="button") }}
+                </div>
+                <div>
+                    <a href="/register" class="button">Или зарегистрироваться</a>
+                </div>
+            </form>
+            {% else %}
+            <div>
+                <img src="" alt="">
+                <a href="/{{ current_user.login }}">{{ current_user.login }}</a>
+                <a href="/logout">Выход</a>
+            </div>
+            {% endif %}
+            <nav>
+                <div>
+                  <a href="/" class="button">Главная</a>
+                </div>
+                <div>
+                    <a href="/users" class="button">Пользователи</a>
+                </div>
+                {% if current_user.is_authenticated %}
+                <div>
+                    <a href="/{{ current_user.login }}" class="button">Профиль</a>
+                </div>
+                <div>
+                    <a href="/{{ current_user.login }}/following" class="button">Подписки</a>
+                </div>
+                <div>
+                    <a href="/{{ current_user.login }}/settings" class="button">Настройки</a>
+                </div>
+                {% endif %}
+                <a href="/search" class="button">Поиск</a>
+            </nav>
+        </aside>
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        <footer>
+			
+		</footer>
+    </body>
+</html>

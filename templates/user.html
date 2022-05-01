@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if not message %}
+<div>
+    <div class="profile">
+        <div>
+            <img src="/static/profile_photos/{{ user.profile_photo }}" alt="Фото профиля" class="profile_photo">
+        </div>
+        <div>
+            <div class="profile_name">
+               {{ user.name }}
+            </div>
+            <div class="profile_login">
+               @{{ user.login }}
+            </div>
+            <div>
+                День рождения: {{ user.birthday }}
+            </div>
+            <div>
+                Дата регистрации: {{ user.birthday }}
+            </div>
+
+            <div>
+                <a href="/{{ user.login }}/following" class="button">
+                    Читает: {{ user.read | length  }}
+                </a>
+            </div>
+            <div>
+                <a href="/{{ user.login }}/followers" class="button">
+                    Читатели: {{ user.readers | length  }}
+                </a>
+            </div>
+            {% if current_user.is_authenticated and current_user.login != user.login %}
+            <div>
+                {% if user.login not in current_user.read_logins %}
+                <a href="/{{ user.login }}/subscribe" class="button button_read">Читать</a>
+                {% else %}
+                <a href="/{{ user.login }}/unsubscribe" class="button button_unread">Перестать читать</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div>
+        Тут посты
+    </div>
+</div>
+{% else %}
+<div>
+    {{ message }}
+</div>
+{% endif %}
+{% endblock %}

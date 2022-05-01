@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <form name="register" action="/register" method="post">
+        {{ register_form.hidden_tag() }}
+        <div>
+            {{ register_form.login.label }}
+            {{ register_form.login() }}
+        </div>
+        <div>
+            {{ register_form.email.label }}
+            {{ register_form.email() }}
+        </div>
+        <div>
+            {{ register_form.last_name.label }}
+            {{ register_form.last_name() }}
+        </div>
+        <div>
+            {{ register_form.first_name.label }}
+            {{ register_form.first_name() }}
+        </div>
+        <div>
+            {{ register_form.birthday.label }}
+            {{ register_form.birthday() }}
+        </div>
+        <div>
+            {{ register_form.password.label }}
+            {{ register_form.password() }}
+        </div>
+        <div>
+            {{ register_form.password_again.label }}
+            {{ register_form.password_again() }}
+        </div>
+        <div>
+            {{ register_form.submit(type="submit") }}
+        </div>
+        {{ message }}
+    </form>
+</div>
+{% endblock %}

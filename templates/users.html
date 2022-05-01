@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if not message %}
+{% block top %}{% endblock %}
+<div>
+    {% for u in users %}
+        <div class="list_element">
+            <a href="/{{ u.login }}">
+                <table>
+                    <tr>
+                        <td class="profile_photo">
+                            <img src="/static/profile_photos/{{ u.profile_photo }}" alt="Фото {{ u.login }}"
+                            class="profile_photo">
+                        </td>
+                        <td class="profile_description">
+                            {{ u.name }}
+                            @{{ u.login }}
+                        </td>
+                        <td class="profile_button">
+
+                        </td>
+                    </tr>
+                </table>
+            </a>
+            <div class="profile_button">
+                {% if current_user.is_authenticated and current_user.login != u.login %}
+                {% if u.login not in current_user.read_logins %}
+                <button name="{{ u.login }}/subscribe" name="" class="button button_read">Читать</button>
+                {% else %}
+                <button name="{{ u.login }}/unsubscribe" class="button button_unread">Перестать читать</button>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    <script src="/static/scripts/subscribe_btn.js"></script>
+</div>
+{% else %}
+<div>
+    {{ message }}
+</div>
+{% endif %}
+{% endblock %}
