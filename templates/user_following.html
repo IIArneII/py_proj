@@ -2,9 +2,24 @@
 
 {% block top %}
 <div>
-    <div>
-        {{ user.name }}
-        @{{ user.login }}
+    <div class="profile_main_data">
+        <div>
+            <div class="profile_name">
+                <a href="/{{ user.login }}" class="profile_name">{{ user.name }}</a>
+            </div>
+            <div class="profile_login f">
+                <a href="/{{ user.login }}" class="profile_login">@{{ user.login }}</a>
+            </div>
+        </div>
+        <div class="button_container">
+            {% if current_user.is_authenticated and current_user.login != user.login %}
+            {% if user.login not in current_user.read_logins %}
+            <div role="button" class="button button_read">Читать</div>
+            {% else %}
+            <div role="button" class="button button_unread">В читаемых</div>
+            {% endif %}
+            {% endif %}
+        </div>
     </div>
     <div>
         <a href="/{{ user.login }}/following" class="button button_active">Читает</a>

@@ -53,8 +53,16 @@ a{
   border-radius: 3rem;
   background-color: rgb(255, 255, 255);
   padding: 0.5rem;
-  transition: 0.5s;
+  transition: 0.3s;
   width: 10rem;
+  display: flex;
+  justify-content: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; 
 }
 
 a.button{
@@ -94,8 +102,9 @@ img.profile_photo{
 
 .list_element{
   padding: 0.5rem;
-  transition: 0.5s;
-  width: 60vw;
+  transition: 0.3s;
+  display: flex;
+  cursor: pointer;
 }
 
 .list_element:hover{
@@ -107,29 +116,36 @@ img.profile_photo{
   height: 3rem;
 }
 
-.list_element td.profile_photo{
-  width: 10%;
+.list_element .profile_data{
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  padding: 0.5rem;
 }
 
-.list_element td.profile_description{
-  width: 60%;
+.profile_main_data{
+  display: flex;
+  justify-content: space-between;
 }
 
-.list_element td.profile_button{
-  width: 30%;
+.button_container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.list_element .button_unread{
+.list_element .profile_name{
+  font-size: 1.5rem;
+}
+
+.list_element .profile_description{
+  margin-top: 0.3rem;
+}
+
+.profile_main_data .button_unread{
   border-style: solid;
   border-width: 0.05rem;
   border-color: rgb(220, 220, 200);
-}
-
-.profile_button{
-  position:relative;
-  bottom: 3rem;
-  float:right;
-  width: 10rem;
 }
 
 .profile{

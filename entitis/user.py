@@ -13,6 +13,7 @@ class User(UserMixin):
         self.birthday = json.get('birthday')
         self.register_date = json.get('register_date')
         self.profile_photo = json.get('profile_photo')
+        self.description = 'Опсиание профиля'
         self.read = json.get('read')
         self.readers = json.get('readers')
         if self.read != None:

@@ -5,32 +5,33 @@
 {% block top %}{% endblock %}
 <div>
     {% for u in users %}
-        <div class="list_element">
-            <a href="/{{ u.login }}">
-                <table>
-                    <tr>
-                        <td class="profile_photo">
-                            <img src="/static/profile_photos/{{ u.profile_photo }}" alt="Фото {{ u.login }}"
-                            class="profile_photo">
-                        </td>
-                        <td class="profile_description">
-                            {{ u.name }}
-                            @{{ u.login }}
-                        </td>
-                        <td class="profile_button">
-
-                        </td>
-                    </tr>
-                </table>
-            </a>
-            <div class="profile_button">
-                {% if current_user.is_authenticated and current_user.login != u.login %}
-                {% if u.login not in current_user.read_logins %}
-                <button name="{{ u.login }}/subscribe" name="" class="button button_read">Читать</button>
-                {% else %}
-                <button name="{{ u.login }}/unsubscribe" class="button button_unread">Перестать читать</button>
-                {% endif %}
-                {% endif %}
+        <div class="list_element" role="button">
+            <div class="f">
+                <img src="/static/profile_photos/{{ u.profile_photo }}" alt="Фото {{ u.login }}" class="profile_photo">
+            </div>
+            <div class="profile_data">
+                <div class="profile_main_data">
+                    <div>
+                        <div class="profile_name">
+                            <a href="/{{ u.login }}" class="profile_name">{{ u.name }}</a>
+                        </div>
+                        <div class="profile_login f">
+                            <a href="/{{ u.login }}" class="profile_login">@{{ u.login }}</a>
+                        </div>
+                    </div>
+                    <div class="button_container">
+                        {% if current_user.is_authenticated and current_user.login != u.login %}
+                        {% if u.login not in current_user.read_logins %}
+                        <div role="button" class="button button_read">Читать</div>
+                        {% else %}
+                        <div role="button" class="button button_unread">В читаемых</div>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="profile_description">
+                    {{ u.name }}
+                </div>
             </div>
         </div>
     {% endfor %}

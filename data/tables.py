@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, Date, DateTime, Boolean, ForeignKey, Table
 from sqlalchemy import orm
 from sqlalchemy_serializer import SerializerMixin
-from flask_login import UserMixin
 from datetime import datetime
 from data.db_session import SqlAlchemyBase
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -11,7 +10,7 @@ Readership = Table('Readership', SqlAlchemyBase.metadata,
                    Column('user_id', ForeignKey('Users.id')))
 
 
-class User(SqlAlchemyBase, SerializerMixin, UserMixin):
+class User(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'Users'
 
     id = Column(Integer, primary_key=True, autoincrement=True, unique=True, nullable=False)
@@ -46,3 +45,11 @@ class User(SqlAlchemyBase, SerializerMixin, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
+
+
+# class Post(SqlAlchemyBase, SerializerMixin):
+#     __tablename__ = 'Posts'
+#
+#     id = Column(Integer, primary_key=True, autoincrement=True, unique=True, nullable=False)
+#     parent_id = None
+#     user_id = None
