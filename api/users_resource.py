@@ -16,7 +16,8 @@ class UsersByIDResource(Resource):
             abort(404, error='User is not found')
         user = user.to_dict(
                 only=('id', 'login', 'email', 'first_name', 'last_name', 'modified_date',
-                      'birthday', 'register_date', 'name', 'profile_photo',
+                      'birthday', 'register_date', 'name', 'profile_photo', 'likes.id', 'retweets.parent_id',
+                      'comments.parent_id',
                       'read.id', 'read.login', 'read.name', 'read.profile_photo',
                       'readers.id', 'readers.login', 'readers.name', 'readers.profile_photo'))
         db.close()
@@ -35,7 +36,7 @@ class UsersResource(Resource):
             abort(404, error='User is not found')
         user = user.to_dict(
                 only=('id', 'login', 'email', 'first_name', 'last_name', 'modified_date',
-                      'birthday', 'register_date', 'name', 'profile_photo',
+                      'birthday', 'register_date', 'name', 'profile_photo', 'description',
                       'read.id', 'read.login', 'read.name', 'read.profile_photo',
                       'readers.id', 'readers.login', 'readers.name', 'readers.profile_photo'))
         db.close()
@@ -105,7 +106,7 @@ class UsersListResource(Resource):
     def get():
         db = db_session.create_session()
         users = db.query(User).all()
-        users = list(map(lambda x: x.to_dict(only=('id', 'login', 'name', 'profile_photo')), users))
+        users = list(map(lambda x: x.to_dict(only=('id', 'login', 'name', 'description', 'profile_photo')), users))
         db.close()
         return jsonify({
             'users': users

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    {% if post.post %}
+    <div class="data">
+        <div>
+            <img src="/static/profile_photos/{{ post.user.profile_photo }}" alt="Фото {{ post.user.login }}" class="profile_photo">
+        </div>
+        <div class="profile_and_content">
+            <div>
+                <a href="/{{ post.user.login }}" class="profile_name">{{ post.user.name }}</a>
+                <a href="/{{ post.user.login }}" class="profile_login">@{{ post.user.login }}</a>
+            </div>
+            <div class="content">
+                {% if post.content %}
+                <div>
+                    {{ post.content }}
+                </div>
+                {% endif %}
+                {% if post.photo %}
+                <div>
+                    <img src="/static/img/{{ post.photo }}" alt="Картинка">
+                </div>
+                {% endif %}
+            </div>
+            <div class="button_bar">
+                <div>
+                    Комментарии: {{ post.comments }}
+                </div>
+                <div>
+                    Ретвит: {{ post.retweets }}
+                </div>
+                <div>
+                    Лайки: {{ post.likes }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="data">
+        <div>
+            <img src="/static/profile_photos/{{ post.user.profile_photo }}" alt="Фото {{ post.user.login }}" class="profile_photo">
+        </div>
+        <div class="profile_and_content">
+            <div>
+                <a href="/{{ post.user.login }}" class="profile_name">{{ post.user.name }}</a>
+                <a href="/{{ post.user.login }}" class="profile_login">@{{ post.user.login }}</a>
+            </div>
+            <div class="content">
+                {% if post.content %}
+                <div>
+                    {{ post.content }}
+                </div>
+                {% endif %}
+                {% if post.photo %}
+                <div>
+                    <img src="/static/img/{{ post.photo }}" alt="Картинка">
+                </div>
+                {% endif %}
+            </div>
+            <div class="button_bar">
+                <div>
+                    Комментарии: {{ post.comments }}
+                </div>
+                <div>
+                    Ретвит: {{ post.retweets }}
+                </div>
+                <div>
+                    Лайки: {{ post.likes }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div class="list posts_list">
+        {% for p in comments %}
+        <div class="list_element" role="button">
+            <div class="data">
+                <div>
+                    <img src="/static/profile_photos/{{ p.user.profile_photo }}" alt="Фото {{ p.user.login }}" class="profile_photo">
+                </div>
+                <div class="profile_and_content">
+                    <div>
+                        <a href="/{{ p.user.login }}" class="profile_name">{{ p.user.name }}</a>
+                        <a href="/{{ p.user.login }}" class="profile_login">@{{ p.user.login }}</a>
+                    </div>
+                    <div class="content">
+                        {% if p.content %}
+                        <div>
+                            {{ p.content }}
+                        </div>
+                        {% endif %}
+                        {% if p.photo %}
+                        <div>
+                            <img src="/static/img/{{ p.photo }}" alt="Картинка">
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="button_bar">
+                        <div>
+                            Комментарии: {{ p.comments }}
+                        </div>
+                        <div>
+                            Ретвит: {{ p.retweets }}
+                        </div>
+                        <div>
+                            Лайки: {{ p.likes }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

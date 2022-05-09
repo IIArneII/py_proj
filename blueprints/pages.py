@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from forms.forms import SearchForm, LoginForm, RegisterForm
+from forms.forms import SearchForm, LoginForm, RegisterForm, WriterForm
 from flask_login import login_required, current_user
 import requests
 from consts import api_root
@@ -8,12 +8,32 @@ from consts import api_root
 pages_blueprint = Blueprint('pages', __name__, template_folder='templates')
 
 
-@pages_blueprint.route('/')
+@pages_blueprint.get('/')
 def main():
-    return render_template('main.html',
-                           title='Главная',
-                           search_form=SearchForm(),
-                           login_form=LoginForm())
+    try:
+        resp = requests.get(f'{api_root}/posts', params={
+            'for_user_id': current_user.id,
+            'post': 'post'
+        }).json()
+        if 'error' not in resp:
+            return render_template('main.html',
+                                   title='Главная',
+                                   search_form=SearchForm(),
+                                   login_form=LoginForm(),
+                                   posts=resp['posts'],
+                                   writer_form=WriterForm())
+        return render_template('main.html',
+                               title='Главная',
+                               search_form=SearchForm(),
+                               login_form=LoginForm(),
+                               message='Сервер не отвечает')
+    except Exception as e:
+        print(f'Error at get {api_root}/posts: {e}')
+        return render_template('main.html',
+                               title='Главная',
+                               search_form=SearchForm(),
+                               login_form=LoginForm(),
+                               message='Сервер не отвечает')
 
 
 @pages_blueprint.get('/register')
@@ -53,24 +73,35 @@ def users():
 
 @pages_blueprint.route('/<user_login>')
 def user(user_login):
-    if current_user.is_authenticated and current_user.login == user_login:
-        return render_template('user.html',
-                               title=user_login,
-                               search_form=SearchForm(),
-                               login_form=LoginForm(),
-                               user=current_user)
     try:
-        resp = requests.get(f'{api_root}/users/{user_login}').json()
-        if 'error' in resp:
+        if current_user.is_authenticated and current_user.login == user_login:
+            posts = requests.get(f'{api_root}/posts', params={
+                'user_id': current_user.id,
+                'post': True
+            }).json()
+            return render_template('user.html',
+                                   title=user_login,
+                                   search_form=SearchForm(),
+                                   login_form=LoginForm(),
+                                   user=current_user,
+                                   posts=posts['posts'])
+
+        user = requests.get(f'{api_root}/users/{user_login}').json()
+        if 'error' in user:
             return render_template('user.html',
                                    title=user_login,
                                    search_form=SearchForm(),
                                    message='Пользователь не найден')
+        posts = requests.get(f'{api_root}/posts', params={
+            'user_id': user['user']['id'],
+            'post': True
+        }).json()
         return render_template('user.html',
                                title=user_login,
                                search_form=SearchForm(),
                                login_form=LoginForm(),
-                               user=resp['user'])
+                               user=user['user'],
+                               posts=posts['posts'])
     except Exception as e:
         print(f'Error at get {api_root}/users/{user_login}: {e}')
         return render_template('user.html',
@@ -139,6 +170,32 @@ def user_followers(user_login):
         print(f'Error at get {api_root}/users/{user_login}: {e}')
         return render_template('user.html',
                                title=user_login,
+                               search_form=SearchForm(),
+                               login_form=LoginForm(),
+                               message='Сервер не отвечает')
+
+
+@pages_blueprint.route('/<user_login>/<int:post_id>')
+def post(user_login, post_id):
+    try:
+        post = requests.get(f'{api_root}/posts/{post_id}').json()
+        comments = requests.get(f'{api_root}/posts/', params={'parent_id': post_id, 'post': 'comment'}).json()
+        if 'error' not in post and 'error' not in comments:
+            return render_template('post.html',
+                                   title=post['post']['user']['name'],
+                                   search_form=SearchForm(),
+                                   login_form=LoginForm(),
+                                   post=post['post'],
+                                   comments=comments['posts'])
+        return render_template('main.html',
+                               title='Главная',
+                               search_form=SearchForm(),
+                               login_form=LoginForm(),
+                               message='Пост не найден')
+    except Exception as e:
+        print(f'Error at get {api_root}/posts: {e}')
+        return render_template('main.html',
+                               title='Главная',
                                search_form=SearchForm(),
                                login_form=LoginForm(),
                                message='Сервер не отвечает')

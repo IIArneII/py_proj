@@ -1,0 +1,36 @@
+.writer{
+    width:100vw;
+    min-height:100vh;
+    background-color: rgba(0,0,0,0.5);
+    position:fixed;
+    overflow:hidden;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+}
+
+.writer .counter{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 20;
+}
+
+.writer .content{
+    background-color: rgb(255, 255, 255);
+    border-radius: 1rem;
+    width: 20rem;
+    height: 20rem;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.writer .form{
+    display: flex;
+    flex-direction: column;
+}
+
+.hide{
+    display: none;
+}

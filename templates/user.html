@@ -1,7 +1,6 @@
-{% extends "base.html" %}
+{% extends "posts.html" %}
 
-{% block content %}
-{% if not message %}
+{% block top %}
 <div>
     <div class="profile">
         <div>
@@ -42,13 +41,5 @@
             {% endif %}
         </div>
     </div>
-    <div>
-        Тут посты
-    </div>
 </div>
-{% else %}
-<div>
-    {{ message }}
-</div>
-{% endif %}
 {% endblock %}

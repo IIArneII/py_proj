@@ -7,18 +7,18 @@ list.forEach(function(elem) {
             let url = elem.querySelector('a.profile_name').href
             if(btn.classList.contains('button_read')){
                 var response = await fetch(url + '/subscribe', {
-                    method: "GET",
+                    method: "PUT",
                     headers: { "Accept": "application/json" }
                 });
                 if (response.ok === true) {
                     btn.classList.remove('button_read')
                     btn.classList.add('button_unread')
-                    btn.innerText = 'В читаемых'
+                    btn.innerText = 'Перестать читать'
                 }
             }
             else{
                 var response = await fetch(url + '/unsubscribe', {
-                    method: "GET",
+                    method: "PUT",
                     headers: { "Accept": "application/json" }
                 });
                 if (response.ok === true) {
@@ -28,6 +28,16 @@ list.forEach(function(elem) {
                 }
             }
         })
+        btn.addEventListener('mouseover', async function(e) {
+            if(btn.classList.contains('button_unread')){
+                btn.innerText = 'Перестать читать'
+            }
+        });
+        btn.addEventListener('mouseout', async function(e) {
+            if(btn.classList.contains('button_unread')){
+                btn.innerText = 'В читаемых'
+            }
+        });
     }
     elem.addEventListener('click', async function(e) {
         location.href = elem.querySelector('a.profile_name').href

@@ -1,0 +1,58 @@
+.posts_list .list_element{
+    flex-direction: column;
+}
+
+.posts_list .data{
+    padding: 0;
+}
+
+.posts_list .content{
+    margin-top: 0.3rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.posts_list .button_bar{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 0.5rem;
+}
+
+.posts_list .profile_name{
+    font-size: 1rem;
+}
+
+.posts_list img{
+    width: 50%;
+    height: auto;
+    border-radius: 1rem;
+}
+
+.posts_list img.profile_photo{
+    border-radius: 100%;
+}
+
+.posts_list .parent_post{
+    margin-top: 1rem;
+    border-style: solid;
+    border-color: rgb(225, 225, 225);
+    border-width: 0.05rem;
+    border-radius: 1rem;
+    transition: 0.3s;
+}
+
+.posts_list .parent_post:hover{
+    background-color: rgb(225, 225, 225);
+}
+
+.posts_list .parent_post .profile_photo{
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.posts_list .parent_post .profile_photo:hover{
+    width: 1.5rem;
+    height: 1.5rem;
+
+    opacity: 0.8;
+}

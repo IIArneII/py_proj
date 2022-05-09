@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, SubmitField, BooleanField, StringField, SearchField, EmailField, DateField
+from wtforms import PasswordField, SubmitField, BooleanField, StringField, SearchField, EmailField, DateField, \
+    HiddenField, TextAreaField, FileField
 from wtforms.validators import DataRequired
 
 
@@ -19,6 +20,14 @@ class RegisterForm(FlaskForm):
     email = EmailField('Почта', validators=[DataRequired()])
     birthday = DateField('День рождения', validators=[DataRequired()], format='%Y-%m-%d')
     submit = SubmitField('Регистрация')
+
+
+class WriterForm(FlaskForm):
+    parent_id = HiddenField()
+    post = HiddenField()
+    content = TextAreaField()
+    photo = FileField()
+    submit = SubmitField('Твитт')
 
 
 class SearchForm(FlaskForm):

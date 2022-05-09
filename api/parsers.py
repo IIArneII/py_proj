@@ -23,3 +23,15 @@ user_password_parser.add_argument('password', required=True, type=str)
 
 user_subscribe_parser = reqparse.RequestParser()
 user_subscribe_parser.add_argument('target_user_login', required=True, type=str)
+
+post_post_parser = reqparse.RequestParser()
+post_post_parser.add_argument('parent_id', required=False, type=int)
+post_post_parser.add_argument('post', required=True, type=bool)
+post_post_parser.add_argument('content', required=False, type=str)
+post_post_parser.add_argument('photo', required=False, type=str)
+
+post_list_parser = reqparse.RequestParser()
+post_list_parser.add_argument('parent_id', required=False, type=int)
+post_list_parser.add_argument('user_id', required=False, type=str)
+post_list_parser.add_argument('post', required=False, type=str)
+post_list_parser.add_argument('for_user_id', required=False, type=int)

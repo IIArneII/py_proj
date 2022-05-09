@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
-    <link rel="stylesheet" type="text/css" href="/static/styles/style.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ title }}</title>
+        <link rel="stylesheet" type="text/css" href="/static/styles/style.css">
+        <link rel="stylesheet" type="text/css" href="/static/styles/list.css">
+        <link rel="stylesheet" type="text/css" href="/static/styles/posts_list.css">
+        <link rel="stylesheet" type="text/css" href="/static/styles/users_list.css">
+        <link rel="stylesheet" type="text/css" href="/static/styles/aside.css">
+        <link rel="stylesheet" type="text/css" href="/static/styles/button.css">
+        <link rel="stylesheet" type="text/css" href="/static/styles/profile.css">
+        <link rel="stylesheet" type="text/css" href="/static/styles/writer.css">
+    </head>
     <body>
+        {% if writer_form %}
+        <div class="writer hide">
+            <div class="counter">
+                <div class="content">
+                    <form name="writer" method="post" enctype="multipart/form-data" class="form">
+                        {{ writer_form.hidden_tag() }}
+                        {{ writer_form.content() }}
+                        {{ writer_form.photo() }}
+                        {{ writer_form.submit(type="submit") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endif %}
         <header class="blur">
             <span class="logo">
                 <img src="" alt="">
@@ -24,32 +45,46 @@
         </header>
         <aside>
             {% if not current_user.is_authenticated %}
-            <form name="login" action="/login" method="post">
-                <div>
-                    {{ login_form.login(render_kw={"placeholder": "Логин"}) }}
-                </div>
-                <div>
-                    {{ login_form.password(render_kw={"placeholder": "Пароль"}) }}<br>
-                </div>
-                <div>
-                    {{ login_form.remember.label }}
-                    {{ login_form.remember() }}<br>
-                </div>
-                <div>
-                    {{ login_form.submit(type="submit", class="button") }}
-                </div>
-                <div>
-                    <a href="/register" class="button">Или зарегистрироваться</a>
-                </div>
-            </form>
-            {% else %}
             <div>
-                <img src="" alt="">
-                <a href="/{{ current_user.login }}">{{ current_user.login }}</a>
-                <a href="/logout">Выход</a>
+                <form name="login" action="/login" method="post">
+                    <div>
+                        {{ login_form.login(render_kw={"placeholder": "Логин"}) }}
+                    </div>
+                    <div>
+                        {{ login_form.password(render_kw={"placeholder": "Пароль"}) }}<br>
+                    </div>
+                    <div>
+                        {{ login_form.remember.label }}
+                        {{ login_form.remember() }}<br>
+                    </div>
+                    <div>
+                        {{ login_form.submit(type="submit", class="button") }}
+                    </div>
+                    <div>
+                        <a href="/register" class="button">Или зарегистрироваться</a>
+                    </div>
+                </form>
+            </div>
+            {% else %}
+            <div  class="profile_aside">
+                <div class="f">
+                    <img src="/static/profile_photos/{{ current_user.profile_photo }}" alt="Фото {{ current_user.login }}" class="profile_photo">
+                </div>
+                <div class="profile_main_data">
+                    <div class="profile_name">
+                        <a href="/{{ current_user.login }}" class="profile_name">{{ current_user.name }}</a>
+                    </div>
+                    <div class="profile_login f">
+                        <a href="/{{ current_user.login }}" class="profile_login">@{{ current_user.login }}</a>
+                    </div>
+
+                    <div class="button_container">
+                        <a href="/logout" class="button">Выход</a>
+                    </div>
+                </div>
             </div>
             {% endif %}
-            <nav>
+            <nav class="button_container">
                 <div>
                   <a href="/" class="button">Главная</a>
                 </div>
@@ -76,7 +111,7 @@
             {% block content %}{% endblock %}
         </main>
         <footer>
-			
+
 		</footer>
     </body>
 </html>

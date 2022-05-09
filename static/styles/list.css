@@ -1,0 +1,95 @@
+.list{
+    display: flex;
+    flex-direction: column;
+}
+
+.list_element{
+    padding: 0.5rem;
+    transition: 0.3s;
+    display: flex;
+    cursor: pointer;
+}
+
+.list_element .data{
+    display: flex;
+    flex-basis: 100%;
+    padding: 0.5rem;
+}
+
+.list_element .profile_and_content{
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    padding: 0.5rem;
+}
+
+.list_element .content{
+    margin-top: 0.3rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.list_element:hover{
+    background-color: rgb(240, 240, 240);
+}
+
+.list_element img.profile_photo{
+    width: 3rem;
+    height: 3rem;
+    transition: 0.3s;
+}
+
+.list_element img.profile_photo:hover{
+    width: 3rem;
+    height: 3rem;
+    opacity: 0.8;
+}
+
+.list_element .button{
+    width: 10rem;
+    display: flex;
+    justify-content: center;
+}
+
+.list_element .lrc{
+    display: flex;
+    justify-content: space-between;
+    border-radius: 3rem;
+    padding: 0.5rem;
+    transition: 0.3s;
+    vertical-align: top;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; 
+}
+
+.list_element .lrc:hover{
+    background-color: rgb(225, 225, 225);
+}
+
+.likes{
+    flex-basis: 8%;
+}
+
+.retweets{
+    flex-basis: 10%;
+}
+
+.comments{
+    flex-basis: 16%;
+}
+
+.like_yes{
+    background-color: rgb(230, 140, 140);
+}
+
+.retweet_yes{
+    background-color: rgb(143, 230, 140);
+}
+
+.comment_yes{
+    background-color: rgb(140, 187, 230);
+}

@@ -4,15 +4,10 @@ import datetime
 import json as j
 
 try:
-    # resp = requests.post(f'{api_root}/users', json={
-    #     'login': 'al4',
-    #     'password': '123',
-    #     'email': 'al@aa3l',
-    #     'birthday': '2020-12-12',
-    #     'last_name': 'ss',
-    #     'first_name': 'ss',
-    # }).json()
-    resp = requests.get(f'{api_root}/users/al').json()
+    resp = requests.get(f'{api_root}/posts/', params={'for_user_id': 5}).json()
+    # resp = requests.put(f'{api_root}/posts/al/like/1').json()
+    # resp = requests.get(f'{api_root}/posts').json()
+
     print(j.dumps(resp, indent=4))
 except Exception as e:
     print(e)

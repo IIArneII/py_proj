@@ -1,0 +1,18 @@
+.profile_aside{
+    display: flex;
+  }
+  
+  .profile_aside .profile_main_data{
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.3rem;
+  }
+  
+  .profile_aside .button{
+    width: 100%;
+  }
+  
+  .profile_aside img.profile_photo{
+    width: 5rem;
+    height: 5rem;
+  }

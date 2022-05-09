@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if not message %}
+{% block top %}{% endblock %}
+<div class="list posts_list">
+    {% for p in posts %}
+    <div class="list_element" role="button">
+        {% if p.parent and not p.content and not p.photo %}
+        <div>
+            <a href="/{{ p.user.login }}" class="profile_name">{{ p.user.name }}</a> ретвитнул(а)
+        </div>
+        <div class="data">
+            <div>
+                <a href="/{{ p.parent.user.login }}">
+                    <img src="/static/profile_photos/{{ p.parent.user.profile_photo }}"
+                         alt="Фото {{ p.parent.user.login }}" class="profile_photo">
+                </a>
+            </div>
+            <div class="profile_and_content">
+                <div>
+                    <a href="/{{ p.parent.user.login }}" class="profile_name">{{ p.parent.user.name }}</a>
+                    <a href="/{{ p.parent.user.login }}" class="profile_login">@{{ p.parent.user.login }}</a>
+                    <span>·</span>
+                    <a href="/{{ p.parent.user.login }}/{{ p.parent.id }}" class="date">{{ p.parent.publication_date
+                        }}</a>
+                </div>
+                <div class="content">
+                    {% if p.parent.content %}
+                    <div>
+                        {{ p.parent.content }}
+                    </div>
+                    {% endif %}
+                    {% if p.parent.photo %}
+                    <div>
+                        <img src="/static/img/{{ p.parent.photo }}" alt="Картинка">
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="button_bar">
+                    {% if current_user.is_authenticated and p.parent.id in current_user.comments_id %}
+                    <div class="comments lrc comment_yes">
+                        <div>
+                            Комментарий
+                        </div>
+                        <div>
+                            {{ p.parent.comments }}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="comments lrc">
+                        <div>
+                            Комментарий
+                        </div>
+                        <div>
+                            {{ p.parent.comments }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if current_user.is_authenticated and p.parent.id in current_user.retweets_id %}
+                    <div class="retweets lrc retweet_yes">
+                        <div>
+                            Ретвит
+                        </div>
+                        <div>
+                            {{ p.parent.retweets }}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="retweets lrc">
+                        <div>
+                            Ретвит
+                        </div>
+                        <div>
+                            {{ p.parent.retweets }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if current_user.is_authenticated and p.parent.id in current_user.likes_id %}
+                    <div class="likes lrc like_yes">
+                        <div>
+                            Лайк
+                        </div>
+                        <div class="likes_count">
+                            {{ p.parent.likes }}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="lrc likes">
+                        <div>
+                            Лайк
+                        </div>
+                        <div class="likes_count">
+                            {{ p.parent.likes }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="data">
+            <div>
+                <a href="/{{ p.user.login }}">
+                    <img src="/static/profile_photos/{{ p.user.profile_photo }}" alt="Фото {{ p.user.login }}"
+                         class="profile_photo">
+                </a>
+            </div>
+            <div class="profile_and_content">
+                <div>
+                    <a href="/{{ p.user.login }}" class="profile_name">{{ p.user.name }}</a>
+                    <a href="/{{ p.user.login }}" class="profile_login">@{{ p.user.login }}</a>
+                    <span>·</span>
+                    <a href="/{{ p.user.login }}/{{ p.id }}" class="date">{{ p.publication_date }}</a>
+                </div>
+                <div class="content">
+                    {% if p.content %}
+                    <div>
+                        {{ p.content }}
+                    </div>
+                    {% endif %}
+                    {% if p.photo %}
+                    <div>
+                        <img src="/static/img/{{ p.photo }}" alt="Картинка">
+                    </div>
+                    {% endif %}
+                    {% if p.parent and p.post %}
+                    <div class="parent_post">
+                        <div class="profile_and_content">
+                            <div>
+                                <a href="/{{ p.parent.user.login }}">
+                                    <img src="/static/profile_photos/{{ p.parent.user.profile_photo }}"
+                                         alt="Фото {{ p.parent.user.login }}" class="profile_photo">
+                                </a>
+                                <a href="/{{ p.parent.user.login }}" class="profile_name">{{ p.parent.user.name }}</a>
+                                <a href="/{{ p.parent.user.login }}" class="profile_login">@{{ p.parent.user.login
+                                    }}</a>
+                                <span>·</span>
+                                <a href="/{{ p.parent.user.login }}/{{ p.parent.id }}" class="date">{{
+                                    p.parent.publication_date }}</a>
+                            </div>
+                            <div class="content">
+                                {% if p.parent.content %}
+                                <div>
+                                    {{ p.parent.content }}
+                                </div>
+                                {% endif %}
+                                {% if p.parent.photo %}
+                                <div>
+                                    <img src="/static/img/{{ p.parent.photo }}" alt="Картинка">
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="button_bar">
+                    {% if current_user.is_authenticated and p.id in current_user.comments_id %}
+                    <div class="comments lrc comment_yes">
+                        <div>
+                            Комментарий
+                        </div>
+                        <div>
+                            {{ p.comments }}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="comments lrc">
+                        <div>
+                            Комментарий
+                        </div>
+                        <div>
+                            {{ p.comments }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if current_user.is_authenticated and p.id in current_user.retweets_id %}
+                    <div class="retweets lrc retweet_yes">
+                        <div>
+                            Ретвит
+                        </div>
+                        <div>
+                            {{ p.retweets }}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="retweets lrc">
+                        <div>
+                            Ретвит
+                        </div>
+                        <div>
+                            {{ p.retweets }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if current_user.is_authenticated and p.id in current_user.likes_id %}
+                    <div class="likes lrc like_yes">
+                        <div>
+                            Лайк
+                        </div>
+                        <div class="likes_count">
+                            {{ p.likes }}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="lrc likes">
+                        <div>
+                            Лайк
+                        </div>
+                        <div class="likes_count">
+                            {{ p.likes }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+    <script src="/static/scripts/posts_list.js"></script>
+    <script src="/static/scripts/writer.js"></script>
+</div>
+{% else %}
+<div>
+    {{ message }}
+</div>
+{% endif %}
+{% endblock %}

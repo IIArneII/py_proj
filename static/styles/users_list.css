@@ -1,0 +1,12 @@
+.users_list .profile{
+    display: flex;
+    justify-content: space-between;
+}
+
+.users_list .profile_name{
+    font-size: 1rem;
+}
+
+.users_list .profile_description{
+    margin-top: 0.3rem;
+}
