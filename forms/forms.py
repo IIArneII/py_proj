@@ -33,3 +33,14 @@ class WriterForm(FlaskForm):
 class SearchForm(FlaskForm):
     search = SearchField('Запрос')
     submit = SubmitField('Поиск')
+
+
+class SettingsForm(FlaskForm):
+    login = StringField('Логин')
+    name = StringField('Имя')
+    profile_photo = FileField()
+    email = EmailField('Почта')
+    birthday = DateField('День рождения', format='%Y-%m-%d')
+    password = PasswordField('Пароль')
+    password_again = PasswordField('Повторите пароль')
+    submit = SubmitField('Сохранить')

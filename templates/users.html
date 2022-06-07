@@ -22,7 +22,7 @@
                         </div>
                         <div class="button_container">
                             {% if current_user.is_authenticated and current_user.login != u.login %}
-                            {% if u.login not in current_user.read_logins %}
+                            {% if u.login not in current_user.following_logins %}
                             <div role="button" class="button button_read">Читать</div>
                             {% else %}
                             <div role="button" class="button button_unread">В читаемых</div>

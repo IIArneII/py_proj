@@ -44,3 +44,14 @@
 .button_unread:hover{
     background-color: rgb(255, 228, 228);
 }
+
+.new_tweet_container{
+    margin: 0.5rem;
+}
+
+.new_tweet{
+    background-color: rgb(140, 187, 230);
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+}

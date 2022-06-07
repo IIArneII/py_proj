@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 from flask_restful import Resource, abort
 from datetime import datetime
 from data import db_session
@@ -16,47 +16,66 @@ class PostsResource(Resource):
             abort(404, error='Post is not found')
 
         post = post.to_dict(
-            only=('id', 'post', 'content', 'photo', 'publication_date', 'likes', 'comments', 'retweets',
-                  'user.id', 'user.login', 'user.name', 'user.profile_photo',
+            only=('id', 'post', 'content', 'photo', 'publication_date',
+                  'comments_count', 'likes_count', 'retweets_count',
+                  'author.id', 'author.login', 'author.name', 'author.profile_photo',
                   'parent.id', 'parent.post', 'parent.photo', 'parent.content', 'parent.publication_date',
-                  'parent.likes', 'parent.comments', 'parent.retweets',
-                  'parent.user.id', 'parent.user.login', 'parent.user.name',
-                  'parent.user.profile_photo'))
+                  'parent.likes_count', 'parent.comments_count', 'parent.retweets_count',
+                  'parent.author.id', 'parent.author.login', 'parent.author.name', 'parent.author.profile_photo'))
         db.close()
         return jsonify({
+            'success': True,
             'post': post
         })
 
 
-class PostsUserResource(Resource):
+class PostsListResource(Resource):
     @staticmethod
-    def get(user_login):
+    def get():
+        json = request.args
+        print(json)
         db = db_session.create_session()
-        user = db.query(User).filter(User.login == user_login).first()
-        if not user:
-            db.close()
-            return abort(404, error='User is not found')
 
-        posts = user.posts
+        query = db.query(Post)
+        if json.get('for_user_id'):
+            query = query.join(Readership, Post.user_id == Readership.c.user_id, isouter=True).filter(
+                (Readership.c.reader_id == json['for_user_id']) | (Post.user_id == json['for_user_id']))
+        if json.get('parent_id'):
+            query = query.filter(Post.parent_id == json['parent_id'])
+        if json.get('substring'):
+            query = query.filter(Post.content.ilike(f'%{json["substring"]}%'))
+        if json.get('user_id'):
+            query = query.filter(Post.user_id == json['user_id'])
+        if json.get('post') == 'post':
+            query = query.filter(Post.post == True)
+        elif json.get('post') == 'comment':
+            query = query.filter(Post.post == False)
+        elif json.get('post') == 'post_and_comment':
+            query = query.filter(Post.content != '', Post.photo != None)
+        posts = query.order_by(Post.publication_date.desc()).all()
+        print(query)
+
         posts = list(map(lambda x: x.to_dict(
-            only=('id', 'post', 'content', 'photo', 'publication_date', 'likes', 'comments', 'retweets',
-                  'user.id', 'user.login', 'user.name', 'user.profile_photo',
+            only=('id', 'post', 'content', 'photo', 'publication_date',
+                  'comments_count', 'likes_count', 'retweets_count',
+                  'author.id', 'author.login', 'author.name', 'author.profile_photo',
                   'parent.id', 'parent.post', 'parent.photo', 'parent.content', 'parent.publication_date',
-                  'parent.likes', 'parent.comments', 'parent.retweets',
-                  'parent.user.id', 'parent.user.login', 'parent.user.name',
-                  'parent.user.profile_photo')), posts))
+                  'parent.likes_count', 'parent.comments_count', 'parent.retweets_count',
+                  'parent.author.id', 'parent.author.login', 'parent.author.name', 'parent.author.profile_photo')),
+                         posts))
 
         db.close()
         return jsonify({
             'success': True,
-            'post': posts
+            'posts': posts
         })
 
     @staticmethod
-    def post(user_login):
-        db = db_session.create_session()
+    def post():
         json = parsers.post_post_parser.parse_args()
-        user = db.query(User).filter(User.login == user_login).first()
+
+        db = db_session.create_session()
+        user = db.query(User).filter(User.login == json['user_login']).first()
         if not user:
             db.close()
             return abort(404, error='User is not found')
@@ -67,9 +86,9 @@ class PostsUserResource(Resource):
                 db.close()
                 return abort(404, error='Parent post is not found')
             if json['post']:
-                parent.retweets += 1
+                parent.retweets_count += 1
             else:
-                parent.comments += 1
+                parent.comments_count += 1
 
         post = Post()
         post.user_id = user.id
@@ -82,121 +101,15 @@ class PostsUserResource(Resource):
         db.commit()
 
         post = post.to_dict(
-            only=('id', 'post', 'content', 'photo', 'publication_date', 'likes',
-                  'user.id', 'user.login', 'user.name', 'user.profile_photo',
+            only=('id', 'post', 'content', 'photo', 'publication_date',
+                  'comments_count', 'likes_count', 'retweets_count',
+                  'author.id', 'author.login', 'author.name', 'author.profile_photo',
                   'parent.id', 'parent.post', 'parent.photo', 'parent.content', 'parent.publication_date',
-                  'parent.user.id', 'parent.user.login', 'parent.user.name',
-                  'parent.user.profile_photo')) | {'comments': len(post.children)}
+                  'parent.likes_count', 'parent.comments_count', 'parent.retweets_count',
+                  'parent.author.id', 'parent.author.login', 'parent.author.name', 'parent.author.profile_photo'))
 
         db.close()
         return jsonify({
             'success': True,
             'post': post
-        })
-
-
-class PostLikeResource(Resource):
-    @staticmethod
-    def put(user_login, post_id):
-        db = db_session.create_session()
-        user = db.query(User).filter(User.login == user_login).first()
-        if not user:
-            db.close()
-            return abort(404, error='User is not found')
-        post = db.query(Post).get(post_id)
-        if not post:
-            db.close()
-            return abort(404, error='Post is not found')
-
-        if post in user.likes:
-            db.close()
-            return jsonify({'success': True})
-
-        user.likes.append(post)
-        post.likes += 1
-        db.commit()
-        db.close()
-        return jsonify({'success': True})
-
-
-class PostUnlikeResource(Resource):
-    @staticmethod
-    def put(user_login, post_id):
-        db = db_session.create_session()
-        user = db.query(User).filter(User.login == user_login).first()
-        if not user:
-            db.close()
-            return abort(404, error='User is not found')
-        post = db.query(Post).get(post_id)
-        if not post:
-            db.close()
-            return abort(404, error='Post is not found')
-
-        if post not in user.likes:
-            db.close()
-            return jsonify({'success': True})
-
-        user.likes.remove(post)
-        post.likes -= 1
-        db.commit()
-        db.close()
-        return jsonify({'success': True})
-
-
-class PostsUserLikesResource(Resource):
-    @staticmethod
-    def get(user_login):
-        db = db_session.create_session()
-        user = db.query(User).filter(User.login == user_login).first()
-        if not user:
-            db.close()
-            return abort(404, error='User is not found')
-
-        likes = user.likes
-        posts = list(map(lambda x: x.to_dict(
-            only=('id', 'post', 'content', 'photo', 'publication_date', 'likes',
-                  'user.id', 'user.login', 'user.name', 'user.profile_photo',
-                  'parent.id', 'parent.post', 'parent.photo', 'parent.content', 'parent.publication_date',
-                  'parent.user.id', 'parent.user.login', 'parent.user.name',
-                  'parent.user.profile_photo')) | {'comments': len(x.children)}, likes))
-
-        db.close()
-        return jsonify({
-            'success': True,
-            'post': posts
-        })
-
-
-class PostsListResource(Resource):
-    @staticmethod
-    def get():
-        json = parsers.post_list_parser.parse_args()
-        db = db_session.create_session()
-
-        query = db.query(Post)
-        if json['for_user_id']:
-            query = query.join(Readership, Post.user_id == Readership.c.user_id).filter(
-                (Readership.c.reader_id == json['for_user_id']) | (Post.user_id == json['for_user_id']))
-        if json['parent_id']:
-            query = query.filter(Post.parent_id == json['parent_id'])
-        if json['user_id']:
-            query = query.filter(Post.user_id == json['user_id'])
-        if json['post'] == 'post':
-            query = query.filter(Post.post == True)
-        elif json['post'] == 'comment':
-            query = query.filter(Post.post == False)
-        posts = query.order_by(Post.publication_date.desc()).all()
-
-        posts = list(map(lambda x: x.to_dict(
-            only=('id', 'post', 'content', 'photo', 'publication_date', 'likes', 'comments', 'retweets',
-                  'user.id', 'user.login', 'user.name', 'user.profile_photo',
-                  'parent.id', 'parent.post', 'parent.photo', 'parent.content', 'parent.publication_date',
-                  'parent.likes', 'parent.comments', 'parent.retweets',
-                  'parent.user.id', 'parent.user.login', 'parent.user.name',
-                  'parent.user.profile_photo')), posts))
-
-        db.close()
-        return jsonify({
-            'success': True,
-            'posts': posts
         })

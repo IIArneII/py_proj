@@ -1,0 +1,15 @@
+{% extends "posts.html" %}
+
+{% block top %}
+<div>
+    {% if search_form_on_page %}
+        <span>
+            <form name="search" action="/search" method="get">
+                {{ search_form_on_page.hidden_tag() }}
+                {{ search_form_on_page.search() }}
+                {{ search_form_on_page.submit(type="submit") }}
+            </form>
+        </span>
+    {% endif %}
+</div>
+{% endblock %}

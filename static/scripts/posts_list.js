@@ -40,6 +40,7 @@ list.forEach(function(elem) {
             let id = elem.querySelector('a.date').href.split('/')
             document.getElementById("parent_id").value = id[id.length - 1];
             retweets = elem.querySelector('.retweets')
+            console.log(retweets)
         })
     }
 
@@ -65,5 +66,6 @@ var list = document.querySelectorAll('.parent_post')
 list.forEach(function(elem) {
     elem.addEventListener('click', async function(e) {
         e.cancelBubble = true
+        location.href = elem.querySelector('a.date').href
     })
 })

@@ -22,17 +22,17 @@
 
             <div>
                 <a href="/{{ user.login }}/following" class="button">
-                    Читает: {{ user.read | length  }}
+                    Читает: {{ user.following_count  }}
                 </a>
             </div>
             <div>
                 <a href="/{{ user.login }}/followers" class="button">
-                    Читатели: {{ user.readers | length  }}
+                    Читатели: {{ user.followers_count  }}
                 </a>
             </div>
             {% if current_user.is_authenticated and current_user.login != user.login %}
             <div>
-                {% if user.login not in current_user.read_logins %}
+                {% if user.login not in current_user.following_logins %}
                 <a href="/{{ user.login }}/subscribe" class="button button_read">Читать</a>
                 {% else %}
                 <a href="/{{ user.login }}/unsubscribe" class="button button_unread">Перестать читать</a>

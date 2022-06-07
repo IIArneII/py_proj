@@ -16,17 +16,21 @@ writer_form.addEventListener("submit", async function(event){
         body: new FormData(writer_form)
     });
     if(response.ok === true){
-        console.log(writer_form.post.value)
+        writer.classList.add('hide')
         if(writer_form.post.value == 'True'){
             if(!retweets.classList.contains('retweet_yes')){
+                console.log(retweets)
                 retweets.classList.add('retweet_yes')
             }
+            let l = retweets.querySelector('.retweets_count')
+            l.innerText = Number(l.innerText) + 1
         }
         else{
             if(!comments.classList.contains('comment_yes')){
                 comments.classList.add('comment_yes')
             }
+            let l = comments.querySelector('.comments_count')
+            l.innerText = Number(l.innerText) + 1
         }
-        writer.classList.add('hide')
     }
 });

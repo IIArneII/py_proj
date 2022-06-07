@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <form name="setting" action="/settings" enctype="multipart/form-data"  method="post">
+        {{ settings_form.hidden_tag() }}
+        <div>
+            {{ settings_form.login.label }}
+            {{ settings_form.login() }}
+        </div>
+        <div>
+            {{ settings_form.name.label }}
+            {{ settings_form.name() }}
+        </div>
+        <div>
+            {{ settings_form.profile_photo.label }}
+            {{ settings_form.profile_photo() }}
+        </div>
+        <div>
+            {{ settings_form.email.label }}
+            {{ settings_form.email() }}
+        </div>
+        <div>
+            {{ settings_form.birthday.label }}
+            {{ settings_form.birthday() }}
+        </div>
+        <div>
+            {{ settings_form.password.label }}
+            {{ settings_form.password() }}
+        </div>
+        <div>
+            {{ settings_form.password_again.label }}
+            {{ settings_form.password_again() }}
+        </div>
+        <div>
+            {{ settings_form.submit(type="submit") }}
+        </div>
+        {{ message }}
+    </form>
+</div>
+{% endblock %}
