@@ -53,4 +53,4 @@ if __name__ == '__main__':
     normalization()
     register_resources()
     register_blueprints()
-    app.run()
+    app.run(debug=False)
